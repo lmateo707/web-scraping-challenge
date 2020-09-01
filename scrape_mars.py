@@ -38,11 +38,37 @@ def scrape_info():
     img = soup.find("img",class_="main_image")['src']
     featured_image_url = jpl_image_url_base + img
 
+
+    # Mars Facts
+    # mars_facts_url = "https://space-facts.com/mars/"
+    # browser.visit(mars_facts_url)
+    # time.sleep(1)
+    # mars_facts_soup = bs(mars_facts_url,"html.parser")
+    # time.sleep(1)
+    # mars_table = mars_facts_soup.find("table",class_="tablepress tablepress-id-mars")
+    # column1 = mars_table.find_all("td",class_="column-1")
+    # column2 = mars_table.find_all("td",class_="column-2")
+    # planet_profile = []
+    # recorded = []
+    # for x in column1:
+    #     planet_profile.append(x.text.strip())
+    # for y in column2:
+    #     recorded.append(y.text.strip())
+    # mars_facts_table = pd.DataFrame({
+    #     "planet_profile": planet_profile,
+    #     "recorded": recorded
+    # })
+    # mars_facts_table_html = mars_facts_table.to_html(header=False, index=Flase)
+
+
     # Dont code under this line
     browser.quit()
     return{
         "news_title": news_title,
         "news_p": news_p,
         "featured_image_url": featured_image_url,
+        # "planet_profile": planet_profile,
+        # "recorded": recorded,
+        # "fact_table": mars_facts_table_html,
     }
     # Do Images for Mars
