@@ -2,12 +2,12 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Web Scraping Challenge</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Web Scraping Challenge</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
 </head>
 
 <body>
@@ -17,6 +17,7 @@
             <p><a href="/scrape" role="button">Scrape New Data</a></p>
         </div>
     </div>
+    {% if mars  %}
     <div class="row row-grid">
         <div class="col-md-12">
             <div class="col-md-12">
@@ -25,17 +26,33 @@
                 <p>{{ mars.news_p }}</p>
                 <hr>
             </div>
-        <div class="col-md-6">
-            <h2><strong>Featured Image</strong></h2>
-            <img src="{{ mars.featured_image_url }}" alt="Featured Image">
-        </div>   
+            <div class="col-md-6">
+                <h2><strong>Featured Image</strong></h2>
+                <img src="{{ mars.featured_image_url }}" alt="Featured Image">
+                <hr>
+            </div>
         </div>
-        <div class="col-md-6">
-            <h2><strong> Mars Facts:</strong></h2>
-            <p>{{ mars.facts_table }} </p>
-        </div>
-    </div>
+        {{mars.mars_facts_table_html | safe}}
+        <div class="hemisphere row ">
+            {% for obj in mars.hemisphere_image_urls %}
+            <!-- <img src="{{obj.img_url}}" width="200" alt=""> -->
+            <!-- <h2>{{obj.title}}</h2> -->
+            <div class="col">
+                <div class="card text-center" style="width: 18rem;">
+                    <img src="{{obj.img_url}}" class="card-img-top" width="100%" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{obj.title}}</h5>
+                    </div>
+                </div>
+            </div>
 
+            {%endfor%}
+        </div>
+
+    </div>
+    {% else %}
+    <h2>Click the scrape button</h2>
+    {%endif%}
 </body>
 
 </html>

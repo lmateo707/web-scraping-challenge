@@ -40,25 +40,57 @@ def scrape_info():
 
 
     # Mars Facts
-    # mars_facts_url = "https://space-facts.com/mars/"
-    # browser.visit(mars_facts_url)
-    # time.sleep(1)
-    # mars_facts_soup = bs(mars_facts_url,"html.parser")
-    # time.sleep(1)
-    # mars_table = mars_facts_soup.find("table",class_="tablepress tablepress-id-mars")
-    # column1 = mars_table.find_all("td",class_="column-1")
-    # column2 = mars_table.find_all("td",class_="column-2")
-    # planet_profile = []
-    # recorded = []
-    # for x in column1:
-    #     planet_profile.append(x.text.strip())
-    # for y in column2:
-    #     recorded.append(y.text.strip())
-    # mars_facts_table = pd.DataFrame({
-    #     "planet_profile": planet_profile,
-    #     "recorded": recorded
-    # })
-    # mars_facts_table_html = mars_facts_table.to_html(header=False, index=Flase)
+
+
+
+    mars_facts_url = "https://space-facts.com/mars/"
+    mars_facts = pd.read_html(mars_facts_url)
+    facts_df = mars_facts[0]
+
+    facts_df.columns = ['Planet Profile','Recorded']
+    mars_facts_table_html = facts_df.to_html(index=False, classes="table table-striped")
+
+
+
+    #Mars Hemisphere Image
+
+    hemisphere_image_urls = []
+    mars_hemisphere_url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
+    hemisphere_base_url = "https://astrogeology.usgs.gov"
+
+    browser.visit(mars_hemisphere_url)
+    time.sleep(1)
+    html_hemispheres = browser.html
+    time.sleep(1)
+    hemisphere_soup = bs(html_hemispheres, 'html.parser')
+    time.sleep(1)
+    items = hemisphere_soup.find_all('div', class_='item')
+    time.sleep(1)
+
+    for x in items:
+        title = x.find("h3").text
+        time.sleep(1)
+        
+        image_url = x.find('a', class_='itemLink product-item')["href"]
+        time.sleep(1)
+
+        
+        browser.visit(hemisphere_base_url + image_url)
+        time.sleep(1)
+        
+        image_url_html = browser.html
+        time.sleep(1)
+        
+        hemisphere_soup = bs(image_url_html,"html.parser")
+        time.sleep(1)
+        
+        hem_image_url = hemisphere_base_url + hemisphere_soup.find("img",class_="wide-image")["src"]
+        time.sleep(1)
+        
+        hemisphere_image_urls.append({"title":title,"img_url":hem_image_url})
+        time.sleep(1)
+
+
 
 
     # Dont code under this line
@@ -67,8 +99,6 @@ def scrape_info():
         "news_title": news_title,
         "news_p": news_p,
         "featured_image_url": featured_image_url,
-        # "planet_profile": planet_profile,
-        # "recorded": recorded,
-        # "fact_table": mars_facts_table_html,
+        "mars_facts_table_html": mars_facts_table_html,
+        "hemisphere_image_urls": hemisphere_image_urls
     }
-    # Do Images for Mars
